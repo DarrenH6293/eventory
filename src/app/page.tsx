@@ -17,12 +17,6 @@ export default function Home() {
           >
             View Threads
           </Link>
-          <Link
-            href="/create-thread"
-            className="px-6 py-3 rounded-lg border border-gray-600 hover:bg-gray-800 transition"
-          >
-            Create a Thread
-          </Link>
         </div>
       </main>
 
