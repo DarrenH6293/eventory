@@ -1,35 +1,27 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
-async function createOrGetUser({
-  email,
-  name,
-}: {
-  email: string;
-  name?: string;
-}) {
+async function createOrGetUser({ email, name }: { email: string; name?: string }) {
   try {
-    const getRes = await fetch(
-      `${API_BASE}/user?email=${encodeURIComponent(email)}`
-    );
+    const getRes = await fetch(`${API_BASE}/user?email=${encodeURIComponent(email)}`);
     if (getRes.ok) {
       const user = await getRes.json();
       return user;
     }
 
     const createRes = await fetch(`${API_BASE}/user`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, name }),
     });
 
-    if (!createRes.ok) throw new Error("Failed to create user");
+    if (!createRes.ok) throw new Error('Failed to create user');
 
     return await createRes.json();
   } catch (err) {
-    console.error("Error in createOrGetUser:", err);
+    console.error('Error in createOrGetUser:', err);
     throw err;
   }
 }

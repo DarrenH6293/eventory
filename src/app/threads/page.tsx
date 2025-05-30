@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 type Thread = {
   id: string;
@@ -14,8 +14,8 @@ type Thread = {
 export default function ThreadsPage() {
   const [threads, setThreads] = useState<Thread[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const { data: session } = useSession();
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
@@ -27,29 +27,26 @@ export default function ThreadsPage() {
       .then(setThreads)
       .catch((err) => {
         console.error(err);
-        setError("Failed to load threads");
+        setError('Failed to load threads');
       })
       .finally(() => setLoading(false));
   }, []);
 
   const handleDelete = async (id: string) => {
-    const confirmed = confirm("Are you sure you want to delete this thread?");
+    const confirmed = confirm('Are you sure you want to delete this thread?');
     if (!confirmed || !session?.user?.email) return;
 
-    const res = await fetch(
-      `${API_BASE}/threads/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "x-user-email": session.user.email,
-        },
-      }
-    );
+    const res = await fetch(`${API_BASE}/threads/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'x-user-email': session.user.email,
+      },
+    });
 
     if (res.ok) {
       setThreads((prev) => prev.filter((t) => t.id !== id));
     } else {
-      alert("Failed to delete thread.");
+      alert('Failed to delete thread.');
     }
   };
 
