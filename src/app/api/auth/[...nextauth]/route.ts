@@ -3,7 +3,7 @@ import GoogleProvider from 'next-auth/providers/google';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
-async function createOrGetUser({ email, username }: { email: string; username?: string }) {
+async function createOrGetUser({ email }: { email: string }) {
   try {
     const getRes = await fetch(`${API_BASE}/user?email=${encodeURIComponent(email)}`);
     if (getRes.ok) {

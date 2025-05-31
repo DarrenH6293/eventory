@@ -66,7 +66,7 @@ export default function CreateUsernamePage() {
         const data = await res.json();
         setError(data.error || "Failed to set username");
       }
-    } catch (err) {
+    } catch {
       setError("Unexpected error occurred");
     } finally {
       setSubmitting(false);
