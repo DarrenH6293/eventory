@@ -152,7 +152,7 @@ export default function ThreadDetail() {
               ))
             : filteredPosts.map((post) => (
                 <li key={post.id} className="border p-4 rounded bg-[#1a1a1a] relative">
-                  {session && post.authorId === currentUserId && (
+                  {session && isThreadCreator && (
                     <button
                       onClick={() => handleDelete(post.id)}
                       className="absolute top-2 right-2 text-red-500 hover:text-red-700"

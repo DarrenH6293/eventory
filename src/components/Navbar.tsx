@@ -3,9 +3,32 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      if (session?.user?.email) {
+        try {
+          const res = await fetch(`${API_BASE}/user?email=${encodeURIComponent(session.user.email)}`);
+          if (res.ok) {
+            const user = await res.json();
+            setUsername(user.username);
+          }
+        } catch (err) {
+          console.error('Failed to fetch user info:', err);
+        }
+      }
+    };
+
+    fetchUsername();
+  }, [session]);
 
   return (
     <nav className="sticky top-0 z-50 bg-gray-800 text-white p-4 flex justify-between items-center shadow">
@@ -33,7 +56,7 @@ export default function Navbar() {
       <div className="flex items-center space-x-4">
         {session ? (
           <>
-            <span className="text-sm text-gray-300">{session.user?.email}</span>
+            <span className="text-sm text-gray-300">{username}</span>
             <button
               onClick={() => signOut()}
               className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"

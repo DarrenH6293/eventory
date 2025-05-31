@@ -3,7 +3,7 @@ import GoogleProvider from 'next-auth/providers/google';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
-async function createOrGetUser({ email, name }: { email: string; name?: string }) {
+async function createOrGetUser({ email, username }: { email: string; username?: string }) {
   try {
     const getRes = await fetch(`${API_BASE}/user?email=${encodeURIComponent(email)}`);
     if (getRes.ok) {
@@ -14,7 +14,7 @@ async function createOrGetUser({ email, name }: { email: string; name?: string }
     const createRes = await fetch(`${API_BASE}/user`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name }),
+      body: JSON.stringify({ email }),
     });
 
     if (!createRes.ok) throw new Error('Failed to create user');
@@ -37,10 +37,7 @@ const handler = NextAuth({
     async signIn({ user }) {
       if (!user.email) return false;
 
-      const dbUser = await createOrGetUser({
-        email: user.email,
-        name: user.name || undefined,
-      });
+      const dbUser = await createOrGetUser({ email: user.email });
 
       user.id = dbUser.id;
 
