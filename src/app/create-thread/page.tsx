@@ -8,6 +8,7 @@ export default function CreateThreadPage() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
   const { data: session, status } = useSession();
 
@@ -27,13 +28,19 @@ export default function CreateThreadPage() {
     const res = await fetch(`${API_BASE}/thread`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, category, creatorId: session?.user?.id }),
+      body: JSON.stringify({
+        title,
+        category,
+        description,
+        creatorId: session?.user?.id,
+      }),
     });
 
     if (res.ok) {
       setMessage('Thread created!');
       setTitle('');
       setCategory('');
+      setDescription('');
       router.push('/threads');
     } else {
       const err = await res.json();
@@ -63,7 +70,7 @@ export default function CreateThreadPage() {
           <div>
             <label className="block font-medium">Category</label>
             <select
-              className="w-full border px-3 py-2 rounded bg-white text-black"
+              className="w-full border px-3 py-2 rounded bg-black text-white"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
@@ -74,6 +81,18 @@ export default function CreateThreadPage() {
               <option value="Games">Games</option>
               <option value="News">News</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block font-medium">Description</label>
+            <textarea
+              className="w-full border px-3 py-2 rounded"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Brief summary of what this thread is about..."
+              rows={4}
+              required
+            />
           </div>
 
           <button

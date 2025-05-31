@@ -7,8 +7,10 @@ import { useSession } from 'next-auth/react';
 type Thread = {
   id: string;
   title: string;
+  description: string;
   category: string;
   creatorId: string;
+  followerCount: number;
 };
 
 export default function ThreadsPage() {
@@ -40,7 +42,7 @@ export default function ThreadsPage() {
     if (response.ok) {
       setThreads((prev) => prev.filter((thread) => thread.id !== id));
     } else {
-      alert('Error deleting the Thread.');
+      alert('Error deleting the thread.');
     }
   };
 
@@ -99,7 +101,11 @@ export default function ThreadsPage() {
                   {thread.title}
                 </h2>
               </Link>
-              <span className="text-sm text-gray-500">Category: {thread.category}</span>
+              <p className="text-sm text-white-400 mb-1">{thread.description}</p>
+              <div className="text-sm text-gray-500 flex justify-between">
+                <span>Category: {thread.category}</span>
+                <span>Followers: {thread.followerCount}</span>
+              </div>
             </li>
           ))}
         </ul>
