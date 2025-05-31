@@ -51,6 +51,11 @@ export default function Navbar() {
             Create Thread
           </Link>
         )}
+        {session && (
+          <Link href="/tracker" className="hover:underline">
+            Tracker
+          </Link>
+        )}
       </div>
 
       <div className="flex items-center space-x-4">
